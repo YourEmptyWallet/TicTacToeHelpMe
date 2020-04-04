@@ -1,11 +1,9 @@
-from pprint import *
-from random import *
+import random
 
 Board = {'topL': ' ', 'topM': ' ', 'topR': ' ', 'midL': ' ', 'midM': ' ', 'midR': ' ', 'lowL': ' ', "lowM": ' ',
          'lowR': ' '}
 
 def PrintBoard():
-
     print(Board['topL'] + '|' + Board['topM'] + '|' + Board['topR'])
     print('-----')
     print(Board['midL'] + '|' + Board['midM'] + '|' + Board['midR'])
@@ -21,9 +19,10 @@ def EmptySpots():
 
 def AIturn():
     empty = EmptySpots()
-    Board[empty[randint(0, len(empty))]] = 'O'
+    Board[empty[random.randint(0, len(empty) - 1)]] = 'O'
     PrintBoard()
     print('=====================================')
+    return True
 
 def PlayerTurn():
     print('Where do you want to play?')
@@ -35,7 +34,6 @@ def PlayerTurn():
         return True
     else:
         print('This spot is taken. Please choose again.')
-        return False
 
 def WinCon():
     return ((Board['topL'] == 'X' and Board['topM'] == 'X' and Board['topR'] == 'X') or
@@ -58,19 +56,19 @@ def LoseCon():
             (Board['topR'] == 'O' and Board['midM'] == 'O' and Board['lowL'] == 'O'))
 
 PrintBoard()
-while True: 
-    while not WinCon() and not LoseCon():
-        if len(EmptySpots()) > 0:
-            if PlayerTurn():
-                AIturn()
-        else:
-            break
-    if WinCon():
-        print('YOU WON!')
-        break
-    if LoseCon():
-        print('YOU LOST!')
-        break
+isPlayerTurn = True
+
+while not WinCon() and not LoseCon():
+    while isPlayerTurn:
+        if PlayerTurn():
+            isPlayerTurn = False
     else:
-        print('ITS A TIE!')
-        break
+        if AIturn():
+            isPlayerTurn = True
+
+if WinCon():
+    print('YOU WON!')
+if LoseCon():
+    print('YOU LOST!')
+else:
+    print('ITS A TIE!')
