@@ -1,0 +1,76 @@
+from pprint import *
+from random import *
+
+Board = {'topL': ' ', 'topM': ' ', 'topR': ' ', 'midL': ' ', 'midM': ' ', 'midR': ' ', 'lowL': ' ', "lowM": ' ',
+         'lowR': ' '}
+
+def PrintBoard():
+
+    print(Board['topL'] + '|' + Board['topM'] + '|' + Board['topR'])
+    print('-----')
+    print(Board['midL'] + '|' + Board['midM'] + '|' + Board['midR'])
+    print('-----')
+    print(Board['lowL'] + '|' + Board['lowM'] + '|' + Board['lowR'])
+
+def EmptySpots():
+    Empty = []
+    for key in Board.keys():
+        if Board[key] == ' ':
+            Empty.append(key)
+    return Empty
+
+def AIturn():
+    empty = EmptySpots()
+    Board[empty[randint(0, len(empty))]] = 'O'
+    PrintBoard()
+    print('=====================================')
+
+def PlayerTurn():
+    print('Where do you want to play?')
+    PlayerPlay = input()
+    if Board[PlayerPlay] == ' ':
+        Board[PlayerPlay] = 'X'
+        PrintBoard()
+        print('=====================================')
+        return True
+    else:
+        print('This spot is taken. Please choose again.')
+        return False
+
+def WinCon():
+    return ((Board['topL'] == 'X' and Board['topM'] == 'X' and Board['topR'] == 'X') or
+            (Board['midL'] == 'X' and Board['midM'] == 'X' and Board['midR'] == 'X') or
+            (Board['lowL'] == 'X' and Board['lowM'] == 'X' and Board['lowR'] == 'X') or
+            (Board['topL'] == 'X' and Board['midL'] == 'X' and Board['lowL'] == 'X') or
+            (Board['topM'] == 'X' and Board['midM'] == 'X' and Board['lowM'] == 'X') or
+            (Board['topR'] == 'X' and Board['midR'] == 'X' and Board['lowR'] == 'X') or
+            (Board['topL'] == 'X' and Board['midM'] == 'X' and Board['lowR'] == 'X') or
+            (Board['topR'] == 'X' and Board['midM'] == 'X' and Board['lowL'] == 'X'))
+
+def LoseCon():
+    return ((Board['topL'] == 'O' and Board['topM'] == 'O' and Board['topR'] == 'O') or
+            (Board['midL'] == 'O' and Board['midM'] == 'O' and Board['midR'] == 'O') or
+            (Board['lowL'] == 'O' and Board['lowM'] == 'O' and Board['lowR'] == 'O') or
+            (Board['topL'] == 'O' and Board['midL'] == 'O' and Board['lowL'] == 'O') or
+            (Board['topM'] == 'O' and Board['midM'] == 'O' and Board['lowM'] == 'O') or
+            (Board['topR'] == 'O' and Board['midR'] == 'O' and Board['lowR'] == 'O') or
+            (Board['topL'] == 'O' and Board['midM'] == 'O' and Board['lowR'] == 'O') or
+            (Board['topR'] == 'O' and Board['midM'] == 'O' and Board['lowL'] == 'O'))
+
+PrintBoard()
+while True: 
+    while not WinCon() and not LoseCon():
+        if len(EmptySpots()) > 0:
+            if PlayerTurn():
+                AIturn()
+        else:
+            break
+    if WinCon():
+        print('YOU WON!')
+        break
+    if LoseCon():
+        print('YOU LOST!')
+        break
+    else:
+        print('ITS A TIE!')
+        break
